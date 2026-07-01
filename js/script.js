@@ -176,6 +176,34 @@
     drawRain()
   }
 
+  // ===== MOUSE PARALLAX (VS CODE + HERO) =====
+  const vscodeWindow = document.querySelector('.vscode-window')
+  const heroContent = document.querySelector('.hero-content')
+  let parallaxX = 0, parallaxY = 0
+
+  if (vscodeWindow || heroContent) {
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2
+      const y = (e.clientY / window.innerHeight - 0.5) * 2
+
+      parallaxX += (x - parallaxX) * 0.05
+      parallaxY += (y - parallaxY) * 0.05
+
+      if (vscodeWindow) {
+        const rotateX = -parallaxY * 3
+        const rotateZ = -parallaxX * 3
+        const translateX = parallaxX * 15
+        const translateY = parallaxY * 10
+        vscodeWindow.style.transform =
+          `rotate(-3deg) translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`
+      }
+
+      if (heroContent) {
+        heroContent.style.transform = `translate(${parallaxX * 8}px, ${parallaxY * 5}px)`
+      }
+    })
+  }
+
   // ===== TYPING EFFECT =====
   const typingEl = document.querySelector('.typing-text')
   if (typingEl) {

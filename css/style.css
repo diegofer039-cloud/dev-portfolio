@@ -135,6 +135,62 @@ body {
   animation: cursorBlink 0.7s step-end infinite;
 }
 
+/* ===== SCAN LINES CRT ===== */
+#scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+}
+
+/* ===== GIANT BACKGROUND TYPOGRAPHY ===== */
+#about::before,
+#skills::before,
+#projects::before,
+#contact::before {
+  content: attr(data-giant);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-code);
+  font-size: clamp(8rem, 20vw, 18rem);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.015);
+  pointer-events: none;
+  letter-spacing: 24px;
+  white-space: nowrap;
+  user-select: none;
+  z-index: 0;
+}
+
+/* ===== ANIMATED GRID BACKGROUND (HERO) ===== */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(88, 166, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 166, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 12s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
+}
+
 /* ===== CODE RAIN CANVAS ===== */
 #code-rain {
   position: fixed;
@@ -445,14 +501,51 @@ section {
   background-clip: text;
 }
 
+/* ===== DIAGONAL SECTION DIVIDERS ===== */
+#about {
+  position: relative;
+  background: var(--bg2);
+  clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+  margin-top: -2%;
+  padding-top: calc(80px + 4%);
+  padding-bottom: calc(80px + 4%);
+  z-index: 2;
+}
+
+#skills {
+  position: relative;
+  clip-path: polygon(0 0, 100% 3%, 100% 97%, 0 100%);
+  margin-top: -1.5%;
+  padding-top: calc(80px + 3%);
+  padding-bottom: calc(80px + 3%);
+  z-index: 3;
+}
+
+#projects {
+  position: relative;
+  clip-path: polygon(0 3%, 100% 0, 100% 100%, 0 97%);
+  margin-top: -1.5%;
+  padding-top: calc(80px + 3%);
+  padding-bottom: calc(80px + 4%);
+  z-index: 4;
+}
+
+#contact {
+  position: relative;
+  clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%);
+  margin-top: -2%;
+  padding-top: calc(80px + 4%);
+  z-index: 5;
+}
+
 /* ===== ABOUT ===== */
 #about {
   background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
 }
 
 .about-grid {
+  position: relative;
+  z-index: 1;
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
@@ -722,6 +815,8 @@ section {
 }
 
 .skills-grid {
+  position: relative;
+  z-index: 1;
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
@@ -780,6 +875,8 @@ section {
 
 /* ===== PROJECTS ===== */
 .projects-grid {
+  position: relative;
+  z-index: 1;
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
@@ -910,10 +1007,11 @@ section {
 /* ===== CONTACT ===== */
 #contact {
   background: var(--bg2);
-  border-top: 1px solid var(--border);
 }
 
 .contact-container {
+  position: relative;
+  z-index: 1;
   max-width: 600px;
   margin: 0 auto;
 }
