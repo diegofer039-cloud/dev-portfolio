@@ -33,6 +33,41 @@ body {
   color: var(--text);
   line-height: 1.7;
   overflow-x: hidden;
+  cursor: none;
+}
+
+/* ===== SCROLL BAR ===== */
+#scroll-bar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 0;
+  background: linear-gradient(to bottom, var(--blue), var(--purple));
+  z-index: 9998;
+  transition: height 0.05s linear;
+  box-shadow: 2px 0 8px rgba(88,166,255,0.3);
+}
+
+/* ===== CUSTOM CURSOR ===== */
+#custom-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  width: 20px;
+  height: 28px;
+  background: var(--blue);
+  opacity: 0.6;
+  mix-blend-mode: difference;
+  transition: width 0.15s, height 0.15s, opacity 0.15s, border-radius 0.15s;
+  transform: translate(-2px, -4px);
+}
+
+#custom-cursor.hover {
+  width: 32px;
+  height: 40px;
+  opacity: 0.8;
+  border-radius: 4px;
 }
 
 /* ===== LOADER ===== */
@@ -572,6 +607,82 @@ section {
   color: var(--text-dim);
 }
 
+/* ===== STATS ===== */
+.stats-grid {
+  max-width: 1100px;
+  margin: 48px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 16px;
+  text-align: center;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.stat-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-4px);
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-code);
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.stat-number.counted {
+  -webkit-text-fill-color: unset;
+  color: var(--text);
+  background: none;
+}
+
+.stat-label {
+  display: block;
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ===== SOUND TOGGLE ===== */
+.sound-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 1rem;
+  width: 36px;
+  height: 36px;
+  cursor: none;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-btn:hover {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.sound-btn.active {
+  border-color: var(--green);
+  color: var(--green);
+}
+
 /* ===== SKILLS ===== */
 /* Marquee */
 .marquee {
@@ -911,5 +1022,23 @@ section.visible {
 
   section {
     padding: 48px 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sound-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+  }
+
+  #custom-cursor {
+    display: none;
+  }
+
+  body {
+    cursor: auto;
   }
 }

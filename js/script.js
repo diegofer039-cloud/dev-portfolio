@@ -28,7 +28,6 @@
 
     setTimeout(() => {
       if (cmdIdx < cmdText.length) {
-        // fallback - if interval didn't start typing
         loaderCmd.textContent = cmdText
         clearInterval(cmdInterval)
         setTimeout(() => loader.classList.add('hidden'), 600)
@@ -36,11 +35,51 @@
     }, maxDelay + 5000)
   }
 
-  // ===== CODE RAIN =====
+  // ===== SCROLL PROGRESS BAR =====
+  const scrollBar = document.getElementById('scroll-bar')
+  if (scrollBar) {
+    function updateScrollBar() {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      const progress = total > 0 ? (window.scrollY / total) * 100 : 0
+      scrollBar.style.height = progress + '%'
+    }
+    window.addEventListener('scroll', updateScrollBar)
+    updateScrollBar()
+  }
+
+  // ===== CUSTOM CURSOR =====
+  const cursor = document.getElementById('custom-cursor')
+  let cursorX = -100, cursorY = -100
+
+  if (cursor) {
+    document.addEventListener('mousemove', (e) => {
+      cursorX = e.clientX
+      cursorY = e.clientY
+      cursor.style.left = cursorX + 'px'
+      cursor.style.top = cursorY + 'px'
+    })
+
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '0'
+    })
+
+    document.addEventListener('mouseenter', () => {
+      cursor.style.opacity = '0.6'
+    })
+
+    document.querySelectorAll('a, button, .btn, .skill-card, .project-card, .stat-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'))
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'))
+    })
+  }
+
+  // ===== CODE RAIN WITH MOUSE INTERACTION =====
   const rainCanvas = document.getElementById('code-rain')
   if (rainCanvas) {
     const ctx = rainCanvas.getContext('2d')
     let rw, rh
+    let rainMouseX = -500, rainMouseY = -500
+
     const codeSnippets = [
       'const', 'let', 'var', 'function', 'return', 'import', 'export',
       'from', 'class', 'extends', 'async', 'await', 'fetch', 'then',
@@ -61,10 +100,17 @@
 
     const fontSize = 14
     const columns = []
+    const maxOffset = 60
     const columnCount = Math.floor(window.innerWidth / (fontSize * 1.5))
 
     for (let i = 0; i < columnCount; i++) {
-      columns[i] = Math.random() * -100
+      columns[i] = {
+        y: Math.random() * -100,
+        speed: 0.4 + Math.random() * 0.3,
+        offset: 0,
+        targetOffset: 0,
+        snippet: codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
+      }
     }
 
     function resizeRain() {
@@ -74,29 +120,52 @@
       rainCanvas.height = rh
     }
 
+    // Track mouse globally for code rain
+    document.addEventListener('mousemove', (e) => {
+      rainMouseX = e.clientX
+      rainMouseY = e.clientY
+    })
+
     function drawRain() {
       ctx.fillStyle = 'rgba(10, 10, 15, 0.05)'
       ctx.fillRect(0, 0, rw, rh)
-
       ctx.font = `${fontSize}px "JetBrains Mono", monospace`
 
       for (let i = 0; i < columns.length; i++) {
-        const text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
+        const col = columns[i]
         const x = i * fontSize * 1.5
-        const y = columns[i] * fontSize
+        const y = col.y * fontSize
+        const text = col.snippet
 
-        const alpha = Math.min(1, (columns[i] * fontSize) / rh * 1.5)
-        const gradient = ctx.createLinearGradient(x, y - fontSize, x, y)
+        // Mouse interaction - push columns away from cursor
+        const dx = x - rainMouseX
+        const dy = y - rainMouseY
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        const pushRadius = 180
+
+        if (dist < pushRadius && dist > 0) {
+          const force = (pushRadius - dist) / pushRadius
+          col.targetOffset = (dx / dist) * force * maxOffset
+        } else {
+          col.targetOffset = 0
+        }
+
+        col.offset += (col.targetOffset - col.offset) * 0.08
+        const drawX = x + col.offset
+
+        const alpha = Math.min(1, (col.y * fontSize) / rh * 1.5)
+        const gradient = ctx.createLinearGradient(drawX, y - fontSize, drawX, y)
         gradient.addColorStop(0, 'transparent')
         gradient.addColorStop(1, `rgba(88, 166, 255, ${alpha * 0.7})`)
         ctx.fillStyle = gradient
-        ctx.fillText(text, x, y)
+        ctx.fillText(text, drawX, y)
 
-        if (y > rh && Math.random() > 0.975) {
-          columns[i] = 0
+        if (y > rh + Math.abs(col.offset)) {
+          col.y = 0
+          col.snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
         }
 
-        columns[i] += 0.4 + Math.random() * 0.3
+        col.y += col.speed
       }
 
       requestAnimationFrame(drawRain)
@@ -190,10 +259,8 @@
         if (navIndicator) {
           const rect = link.getBoundingClientRect()
           const navRect = link.closest('.nav-list').getBoundingClientRect()
-          const topOffset = rect.top - navRect.top
-          const height = rect.height
-          navIndicator.style.height = height + 'px'
-          navIndicator.style.transform = `translateY(${topOffset}px)`
+          navIndicator.style.height = rect.height + 'px'
+          navIndicator.style.transform = `translateY(${rect.top - navRect.top}px)`
         }
       }
     })
@@ -214,7 +281,6 @@
     let lineIdx = 0
     let charPos = 0
     const vscodeCursor = vscodeTyping.querySelector('.vscode-cursor-line')
-    const lnSpan = vscodeTyping.querySelector('.ln')
 
     function typeVSCode() {
       if (!vscodeTyping) return
@@ -228,7 +294,6 @@
         charPos = 0
         lineIdx = (lineIdx + 1) % codeLines.length
         setTimeout(() => {
-          // clear line
           while (vscodeTyping.childNodes.length > 2) {
             vscodeTyping.removeChild(vscodeTyping.childNodes[1])
           }
@@ -237,8 +302,107 @@
       }
     }
 
-    // wait for loader to finish
     setTimeout(typeVSCode, 4000)
+  }
+
+  // ===== STATS COUNTER =====
+  const statNumbers = document.querySelectorAll('.stat-number')
+  if (statNumbers.length) {
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target
+          const target = parseInt(el.dataset.target)
+          let current = 0
+          const duration = 1500
+          const step = Math.max(1, Math.floor(target / 60))
+          const timer = setInterval(() => {
+            current += step
+            if (current >= target) {
+              el.textContent = target + '+'
+              clearInterval(timer)
+            } else {
+              el.textContent = current
+            }
+          }, duration / (target / step))
+          statObserver.unobserve(el)
+        }
+      })
+    }, { threshold: 0.5 })
+
+    statNumbers.forEach(el => statObserver.observe(el))
+  }
+
+  // ===== SOUND KEYBOARD =====
+  const soundBtn = document.getElementById('sound-toggle')
+  let audioCtx = null
+  let soundEnabled = false
+  let lastSoundTime = 0
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+    }
+  }
+
+  function playKeyClick() {
+    if (!soundEnabled || !audioCtx) return
+    const now = Date.now()
+    if (now - lastSoundTime < 80) return
+    lastSoundTime = now
+
+    try {
+      const osc = audioCtx.createOscillator()
+      const gain = audioCtx.createGain()
+      osc.connect(gain)
+      gain.connect(audioCtx.destination)
+      osc.type = 'square'
+      osc.frequency.value = 600 + Math.random() * 400
+      gain.gain.value = 0.03
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04)
+      osc.start(audioCtx.currentTime)
+      osc.stop(audioCtx.currentTime + 0.04)
+    } catch (e) {
+      // ignore audio errors
+    }
+  }
+
+  if (soundBtn) {
+    soundBtn.addEventListener('click', () => {
+      initAudio()
+      soundEnabled = !soundEnabled
+      soundBtn.classList.toggle('active', soundEnabled)
+      soundBtn.textContent = soundEnabled ? '🔊' : '🔇'
+    })
+
+    window.addEventListener('scroll', playKeyClick)
+  }
+
+  // ===== ABOUT TERMINAL TYPING =====
+  const terminalText = document.getElementById('terminal-text')
+  if (terminalText) {
+    const aboutText = 'Soy Diego, desarrollador frontend apasionado por crear experiencias web interactivas y funcionales. Trabajo con HTML, CSS, JavaScript, React y Python. Me encanta el código limpio, las animaciones y todo lo relacionado con el diseño digital.'
+    let ti = 0
+
+    function typeTerminal() {
+      if (ti < aboutText.length) {
+        terminalText.textContent += aboutText[ti]
+        ti++
+        setTimeout(typeTerminal, 15 + Math.random() * 20)
+      }
+    }
+
+    const termObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(typeTerminal, 800)
+          termObserver.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.3 })
+
+    const termBody = document.getElementById('terminal-body')
+    if (termBody) termObserver.observe(termBody)
   }
 
 })()
