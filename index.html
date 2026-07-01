@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diego — Desarrollador Frontend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div id="loader">
+    <div class="loader-terminal">
+      <div class="loader-line" data-delay="0">[SISTEMA] Inicializando portfolio...</div>
+      <div class="loader-line" data-delay="400">[SISTEMA] Cargando módulos:</div>
+      <div class="loader-line" data-delay="800">  ✓ core.html          — 3.2ms</div>
+      <div class="loader-line" data-delay="1000">  ✓ styles.css         — 1.8ms</div>
+      <div class="loader-line" data-delay="1200">  ✓ animations.js      — 2.4ms</div>
+      <div class="loader-line" data-delay="1400">  ✓ python_module.py   — 1.1ms</div>
+      <div class="loader-line" data-delay="1600">  ✓ javascript.es6     — 2.0ms</div>
+      <div class="loader-line" data-delay="2000" id="loader-done">[SISTEMA] ✓ Todos los módulos cargados.</div>
+      <div class="loader-line loader-blink" data-delay="2500" id="loader-welcome">BIENVENIDO, DIEGO</div>
+      <div class="loader-line" data-delay="3200" id="loader-enter">
+        <span class="loader-prompt">$</span> <span class="loader-cmd" id="loader-cmd"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CODE RAIN CANVAS (fondo hero) ===== -->
+  <canvas id="code-rain"></canvas>
+
+  <!-- ===== NAV ===== -->
+  <nav id="nav">
+    <ul class="nav-list">
+      <li><a href="#hero" class="nav-link active" data-label="Inicio">&lt;/&gt;</a></li>
+      <li><a href="#about" class="nav-link" data-label="Sobre mí">~/</a></li>
+      <li><a href="#skills" class="nav-link" data-label="Skills">{ }</a></li>
+      <li><a href="#projects" class="nav-link" data-label="Proyectos">[ ]</a></li>
+      <li><a href="#contact" class="nav-link" data-label="Contacto">@</a></li>
+    </ul>
+    <div class="nav-indicator"></div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">&lt;desarrollador /&gt;</div>
+      <h1 class="glitch" data-text="DIEGO">DIEGO</h1>
+      <p class="hero-sub"><span class="typing-text"></span><span class="typing-cursor">|</span></p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contact" class="btn btn-outline">Contacto</a>
+      </div>
+    </div>
+
+    <!-- VS Code floating window -->
+    <div class="vscode-window">
+      <div class="vscode-header">
+        <span class="vscode-dot red"></span>
+        <span class="vscode-dot yellow"></span>
+        <span class="vscode-dot green"></span>
+        <span class="vscode-file">portfolio.js — Diego</span>
+      </div>
+      <div class="vscode-body">
+        <div class="vscode-line"><span class="ln">1</span> <span class="kw">const</span> developer = {</div>
+        <div class="vscode-line"><span class="ln">2</span>   <span class="prop">name</span>: <span class="str">"Diego"</span>,</div>
+        <div class="vscode-line"><span class="ln">3</span>   <span class="prop">role</span>: <span class="str">"Frontend Developer"</span>,</div>
+        <div class="vscode-line"><span class="ln">4</span>   <span class="prop">stack</span>: [<span class="str">"HTML"</span>, <span class="str">"CSS"</span>, <span class="str">"JS"</span>, <span class="str">"React"</span>],</div>
+        <div class="vscode-line"><span class="ln">5</span>   <span class="prop">passion</span>: <span class="str">"building experiences"</span></div>
+        <div class="vscode-line"><span class="ln">6</span> }</div>
+        <div class="vscode-line"><span class="ln">7</span> <span class="kw">export</span> <span class="kw">default</span> developer;</div>
+        <div class="vscode-line vscode-typing"><span class="ln">8</span> <span class="vscode-cursor-line"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="section-header">
+      <span class="section-tag">// about.js</span>
+      <h2>Sobre mí</h2>
+    </div>
+    <div class="about-grid">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <span class="terminal-title">bash — about.sh</span>
+          <span class="terminal-dots">
+            <span></span><span></span><span></span>
+          </span>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="terminal-line"><span class="prompt">diego@portfolio:~$</span> cat about.txt</div>
+          <div class="terminal-line terminal-typing" id="terminal-text"></div>
+          <div class="terminal-line"><span class="prompt">diego@portfolio:~$</span> <span class="cursor-blink">_</span></div>
+        </div>
+      </div>
+      <div class="about-cube">
+        <h3>TECH <span>STACK</span></h3>
+        <div class="cube-container">
+          <div class="cube">
+            <div class="cube-face front"><span class="cube-icon">&lt;/&gt;</span><span>HTML</span></div>
+            <div class="cube-face back"><span class="cube-icon">{ }</span><span>CSS</span></div>
+            <div class="cube-face right"><span class="cube-icon">JS</span><span>JavaScript</span></div>
+            <div class="cube-face left"><span class="cube-icon">⚛</span><span>React</span></div>
+            <div class="cube-face top"><span class="cube-icon">🐍</span><span>Python</span></div>
+            <div class="cube-face bottom"><span class="cube-icon">▲</span><span>Vite</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section id="skills">
+    <div class="section-header">
+      <span class="section-tag">// skills.py</span>
+      <h2>Skills</h2>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        <span class="marquee-item">Python</span>
+        <span class="marquee-item">JavaScript</span>
+        <span class="marquee-item">React</span>
+        <span class="marquee-item">HTML5</span>
+        <span class="marquee-item">CSS3</span>
+        <span class="marquee-item">Git</span>
+        <span class="marquee-item">Node.js</span>
+        <span class="marquee-item">Vite</span>
+        <span class="marquee-item">APIs REST</span>
+        <span class="marquee-item">TypeScript</span>
+        <span class="marquee-item">GitHub Actions</span>
+        <span class="marquee-item">VS Code</span>
+        <span class="marquee-item">Python</span>
+        <span class="marquee-item">JavaScript</span>
+        <span class="marquee-item">React</span>
+        <span class="marquee-item">HTML5</span>
+        <span class="marquee-item">CSS3</span>
+        <span class="marquee-item">Git</span>
+        <span class="marquee-item">Node.js</span>
+        <span class="marquee-item">Vite</span>
+        <span class="marquee-item">APIs REST</span>
+        <span class="marquee-item">TypeScript</span>
+        <span class="marquee-item">GitHub Actions</span>
+        <span class="marquee-item">VS Code</span>
+      </div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" data-speed="0.02">
+        <span class="skill-icon py">#</span>
+        <span class="skill-name">Python</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+      </div>
+      <div class="skill-card" data-speed="0.03">
+        <span class="skill-icon js">{ }</span>
+        <span class="skill-name">JavaScript</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+      </div>
+      <div class="skill-card" data-speed="0.015">
+        <span class="skill-icon react">⚛</span>
+        <span class="skill-name">React</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+      </div>
+      <div class="skill-card" data-speed="0.025">
+        <span class="skill-icon html">&lt;/&gt;</span>
+        <span class="skill-name">HTML/CSS</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-card" data-speed="0.02">
+        <span class="skill-icon git">○</span>
+        <span class="skill-name">Git</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+      </div>
+      <div class="skill-card" data-speed="0.01">
+        <span class="skill-icon api">↔</span>
+        <span class="skill-name">APIs REST</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects">
+    <div class="section-header">
+      <span class="section-tag">// projects.ts</span>
+      <h2>Proyectos</h2>
+    </div>
+    <div class="projects-grid">
+      <article class="project-card">
+        <div class="project-terminal">
+          <div class="project-term-header">
+            <span class="project-term-dots"><span></span><span></span><span></span></span>
+            <span class="project-term-title">app-clima</span>
+          </div>
+          <div class="project-term-body">
+            <span class="code-comment">// Clima en tiempo real</span>
+            <span class="code-line"><span class="kw">fetch</span>(<span class="str">'api.openweathermap.org'</span>)</span>
+            <span class="code-line">  .<span class="prop">then</span>(<span class="kw">res</span> =&gt; res.<span class="prop">json</span>())</span>
+          </div>
+        </div>
+        <h3>App del Clima</h3>
+        <p>Consulta el clima de cualquier ciudad. OpenWeatherMap API.</p>
+        <div class="project-tags">
+          <span>HTML</span><span>CSS</span><span>JS</span><span>API</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/diegofer039-cloud/app-clima" target="_blank" class="btn btn-small">Repo</a>
+          <a href="https://diegofer039-cloud.github.io/app-clima" target="_blank" class="btn btn-small">Demo</a>
+        </div>
+      </article>
+      <article class="project-card">
+        <div class="project-terminal">
+          <div class="project-term-header">
+            <span class="project-term-dots"><span></span><span></span><span></span></span>
+            <span class="project-term-title">todo-list</span>
+          </div>
+          <div class="project-term-body">
+            <span class="code-comment">// CRUD + localStorage</span>
+            <span class="code-line"><span class="kw">const</span> todos = <span class="prop">JSON</span>.<span class="prop">parse</span>(</span>
+            <span class="code-line">  localStorage.<span class="prop">getItem</span>(<span class="str">'todos'</span>)</span>
+          </div>
+        </div>
+        <h3>Todo List App</h3>
+        <p>CRUD completo con categorías, fechas, filtros y persistencia.</p>
+        <div class="project-tags">
+          <span>HTML</span><span>CSS</span><span>JS</span><span>localStorage</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/diegofer039-cloud/todo-list-app" target="_blank" class="btn btn-small">Repo</a>
+          <a href="https://diegofer039-cloud.github.io/todo-list-app" target="_blank" class="btn btn-small">Demo</a>
+        </div>
+      </article>
+      <article class="project-card">
+        <div class="project-terminal">
+          <div class="project-term-header">
+            <span class="project-term-dots"><span></span><span></span><span></span></span>
+            <span class="project-term-title">buscador-peliculas</span>
+          </div>
+          <div class="project-term-body">
+            <span class="code-comment">// React + TMDB</span>
+            <span class="code-line"><span class="kw">function</span> <span class="prop">Search</span>() {</span>
+            <span class="code-line">  <span class="kw">return</span> <span class="prop">&lt;MovieCard</span> /&gt;</span>
+          </div>
+        </div>
+        <h3>Buscador de Películas</h3>
+        <p>React + Vite + TMDB API. Paginación, favoritos, skeletons.</p>
+        <div class="project-tags">
+          <span>React</span><span>Vite</span><span>API</span><span>CI/CD</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/diegofer039-cloud/buscador-peliculas" target="_blank" class="btn btn-small">Repo</a>
+          <a href="https://diegofer039-cloud.github.io/buscador-peliculas" target="_blank" class="btn btn-small">Demo</a>
+        </div>
+      </article>
+      <article class="project-card">
+        <div class="project-terminal">
+          <div class="project-term-header">
+            <span class="project-term-dots"><span></span><span></span><span></span></span>
+            <span class="project-term-title">trello-clone</span>
+          </div>
+          <div class="project-term-body">
+            <span class="code-comment">// Kanban drag & drop</span>
+            <span class="code-line"><span class="kw">import</span> { <span class="prop">DndContext</span> } <span class="kw">from</span></span>
+            <span class="code-line">  <span class="str">'@dnd-kit/core'</span></span>
+          </div>
+        </div>
+        <h3>Trello Clone</h3>
+        <p>Tablero Kanban con drag & drop, edición inline y persistencia.</p>
+        <div class="project-tags">
+          <span>React</span><span>Vite</span><span>@dnd-kit</span><span>CI/CD</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/diegofer039-cloud/trello-clone" target="_blank" class="btn btn-small">Repo</a>
+          <a href="https://diegofer039-cloud.github.io/trello-clone" target="_blank" class="btn btn-small">Demo</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="section-header">
+      <span class="section-tag">// contact.py</span>
+      <h2>Contacto</h2>
+    </div>
+    <div class="contact-container">
+      <div class="contact-terminal">
+        <div class="terminal-header">
+          <span class="terminal-title">terminal — contacto</span>
+          <span class="terminal-dots"><span></span><span></span><span></span></span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="prompt">diego@portfolio:~$</span> ./contact.sh</div>
+          <div class="terminal-line"><span class="prompt">diego@portfolio:~$</span> Enviando mensaje...</div>
+          <div class="terminal-line contact-form">
+            <div class="form-line">
+              <span class="prompt">email&gt;</span>
+              <a href="mailto:diegofer039@gmail.com" class="form-link">diegofer039@gmail.com</a>
+            </div>
+            <div class="form-line">
+              <span class="prompt">github&gt;</span>
+              <a href="https://github.com/diegofer039-cloud" target="_blank" class="form-link">/diegofer039-cloud</a>
+            </div>
+            <div class="form-line">
+              <span class="prompt">linkedin&gt;</span>
+              <a href="https://linkedin.com/in/diegofer039" target="_blank" class="form-link">/in/diegofer039</a>
+            </div>
+          </div>
+          <div class="terminal-line"><span class="prompt">diego@portfolio:~$</span> <span class="cursor-blink">_</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Diego — Built with code &lt;3</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
