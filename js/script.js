@@ -1,5 +1,33 @@
 (function () {
 
+  // ===== LENIS SMOOTH SCROLL =====
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    smoothWheel: true,
+    touchMultiplier: 2,
+    infinite: false,
+  })
+
+  function raf(time) {
+    lenis.raf(time)
+    requestAnimationFrame(raf)
+  }
+  requestAnimationFrame(raf)
+
+  // ===== GSAP + LENIS INTEGRATION =====
+  lenis.on('scroll', ScrollTrigger.update)
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000)
+  })
+  gsap.ticker.lagSmoothing(0)
+
+  function onScroll(cb) {
+    lenis.on('scroll', cb)
+    cb()
+  }
+
   // ===== LOADER =====
   const loader = document.getElementById('loader')
   if (loader) {
@@ -22,7 +50,10 @@
         cmdIdx++
       } else {
         clearInterval(cmdInterval)
-        setTimeout(() => loader.classList.add('hidden'), 600)
+        setTimeout(() => {
+          loader.classList.add('hidden')
+          openCurtain()
+        }, 600)
       }
     }, 80)
 
@@ -30,21 +61,127 @@
       if (cmdIdx < cmdText.length) {
         loaderCmd.textContent = cmdText
         clearInterval(cmdInterval)
-        setTimeout(() => loader.classList.add('hidden'), 600)
+        setTimeout(() => {
+          loader.classList.add('hidden')
+          openCurtain()
+        }, 600)
       }
     }, maxDelay + 5000)
+  }
+
+  // ===== PAGE TRANSITION CURTAIN =====
+  const curtainTop = document.querySelector('.curtain-top')
+  const curtainBottom = document.querySelector('.curtain-bottom')
+  let curtainOpened = false
+
+  function openCurtain() {
+    if (curtainOpened) return
+    curtainOpened = true
+    if (curtainTop && curtainBottom) {
+      curtainTop.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)'
+      curtainBottom.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)'
+      requestAnimationFrame(() => {
+        curtainTop.style.transform = 'translateY(-100%)'
+        curtainBottom.style.transform = 'translateY(100%)'
+      })
+      setTimeout(() => {
+        curtainTop.style.display = 'none'
+        curtainBottom.style.display = 'none'
+        scrambleHeroTitle()
+        animateSections()
+      }, 900)
+    }
+  }
+
+  // ===== TEXT SCRAMBLE ON HERO TITLE =====
+  const heroTitle = document.querySelector('.glitch')
+  let scrambled = false
+
+  function scrambleHeroTitle() {
+    if (scrambled || !heroTitle) return
+    scrambled = true
+    const originalText = heroTitle.dataset.text || heroTitle.textContent
+    const chars = '!<>-_\\/[]{}—=+*^?#________0123456789'
+    let frame = 0
+    const totalFrames = 25
+
+    function step() {
+      const result = originalText.split('').map((char, i) => {
+        if (char === ' ') return ' '
+        const progress = frame / totalFrames
+        const charProgress = i / originalText.length
+        if (progress > charProgress) return originalText[i]
+        return chars[Math.floor(Math.random() * chars.length)]
+      }).join('')
+
+      heroTitle.textContent = result
+      heroTitle.dataset.text = originalText
+      frame++
+
+      if (frame <= totalFrames) {
+        requestAnimationFrame(step)
+      } else {
+        heroTitle.textContent = originalText
+        heroTitle.dataset.text = originalText
+      }
+    }
+
+    step()
+  }
+
+  // ===== SPLIT TEXT ON SECTION HEADINGS =====
+  const splitHeadings = document.querySelectorAll('[data-split]')
+  splitHeadings.forEach(heading => {
+    const text = heading.textContent
+    heading.textContent = ''
+    ;[...text].forEach((char) => {
+      const span = document.createElement('span')
+      span.className = 'char'
+      span.textContent = char === ' ' ? '\u00A0' : char
+      heading.appendChild(span)
+    })
+
+    gsap.fromTo(heading.querySelectorAll('.char'),
+      { opacity: 0, y: 30, rotateX: -40 },
+      {
+        opacity: 1, y: 0, rotateX: 0,
+        duration: 0.5,
+        stagger: 0.025,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: heading,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      }
+    )
+  })
+
+  // ===== GSAP SECTION REVEALS =====
+  function animateSections() {
+    const sections = document.querySelectorAll('section')
+    sections.forEach(section => {
+      gsap.to(section, {
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      })
+    })
   }
 
   // ===== SCROLL PROGRESS BAR =====
   const scrollBar = document.getElementById('scroll-bar')
   if (scrollBar) {
-    function updateScrollBar() {
+    onScroll(() => {
       const total = document.documentElement.scrollHeight - window.innerHeight
-      const progress = total > 0 ? (window.scrollY / total) * 100 : 0
+      const progress = total > 0 ? (lenis.scroll / total) * 100 : 0
       scrollBar.style.height = progress + '%'
-    }
-    window.addEventListener('scroll', updateScrollBar)
-    updateScrollBar()
+    })
   }
 
   // ===== CUSTOM CURSOR =====
@@ -120,7 +257,6 @@
       rainCanvas.height = rh
     }
 
-    // Track mouse globally for code rain
     document.addEventListener('mousemove', (e) => {
       rainMouseX = e.clientX
       rainMouseY = e.clientY
@@ -137,7 +273,6 @@
         const y = col.y * fontSize
         const text = col.snippet
 
-        // Mouse interaction - push columns away from cursor
         const dx = x - rainMouseX
         const dy = y - rainMouseY
         const dist = Math.sqrt(dx * dx + dy * dy)
@@ -249,21 +384,6 @@
     setTimeout(typeEffect, 3500)
   }
 
-  // ===== SECTION REVEAL =====
-  const sections = document.querySelectorAll('section')
-  if (sections.length) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-        } else {
-          entry.target.classList.remove('visible')
-        }
-      })
-    }, { threshold: 0.15 })
-    sections.forEach(s => observer.observe(s))
-  }
-
   // ===== NAV ACTIVE TRACKING =====
   const navLinks = document.querySelectorAll('.nav-link')
   const navIndicator = document.querySelector('.nav-indicator')
@@ -273,7 +393,7 @@
     let currentId = ''
     allSections.forEach(section => {
       const top = section.offsetTop - 200
-      if (window.scrollY >= top) {
+      if (lenis.scroll >= top) {
         currentId = section.getAttribute('id')
       }
     })
@@ -294,8 +414,19 @@
     })
   }
 
-  window.addEventListener('scroll', updateNav)
-  setTimeout(updateNav, 100)
+  onScroll(updateNav)
+  setTimeout(updateNav, 200)
+
+  // ===== NAV SMOOTH SCROLL =====
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault()
+      const target = document.querySelector(link.getAttribute('href'))
+      if (target) {
+        lenis.scrollTo(target, { offset: 0, duration: 1.2 })
+      }
+    })
+  })
 
   // ===== VS CODE TYPING ANIMATION =====
   const vscodeTyping = document.querySelector('.vscode-typing')
@@ -403,7 +534,7 @@
       soundBtn.textContent = soundEnabled ? '🔊' : '🔇'
     })
 
-    window.addEventListener('scroll', playKeyClick)
+    onScroll(playKeyClick)
   }
 
   // ===== ABOUT TERMINAL TYPING =====

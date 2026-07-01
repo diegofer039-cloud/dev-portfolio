@@ -28,6 +28,12 @@
     </div>
   </div>
 
+  <!-- ===== PAGE TRANSITION CURTAIN ===== -->
+  <div id="page-curtain">
+    <div class="curtain-top"></div>
+    <div class="curtain-bottom"></div>
+  </div>
+
   <!-- ===== SCROLL PROGRESS BAR ===== -->
   <div id="scroll-bar"></div>
 
@@ -90,7 +96,7 @@
   <section id="about" data-giant="SOBRE MI">
     <div class="section-header">
       <span class="section-tag">// about.js</span>
-      <h2>Sobre mí</h2>
+      <h2 data-split>Sobre mí</h2>
     </div>
     <div class="about-grid">
       <div class="terminal-window">
@@ -144,7 +150,7 @@
   <section id="skills" data-giant="SKILLS">
     <div class="section-header">
       <span class="section-tag">// skills.py</span>
-      <h2>Skills</h2>
+      <h2 data-split>Skills</h2>
     </div>
     <div class="marquee">
       <div class="marquee-track">
@@ -212,7 +218,7 @@
   <section id="projects" data-giant="PROYECTOS">
     <div class="section-header">
       <span class="section-tag">// projects.ts</span>
-      <h2>Proyectos</h2>
+      <h2 data-split>Proyectos</h2>
     </div>
     <div class="projects-grid">
       <article class="project-card">
@@ -310,7 +316,7 @@
   <section id="contact" data-giant="CONTACTO">
     <div class="section-header">
       <span class="section-tag">// contact.py</span>
-      <h2>Contacto</h2>
+      <h2 data-split>Contacto</h2>
     </div>
     <div class="contact-container">
       <div class="contact-terminal">
@@ -345,6 +351,9 @@
     <p>&copy; 2026 Diego — Built with code &lt;3</p>
   </footer>
 
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>
