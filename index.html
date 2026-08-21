@@ -53,6 +53,7 @@
       <li><a href="#about" class="nav-link" data-label="Sobre mí">~/</a></li>
       <li><a href="#skills" class="nav-link" data-label="Skills">{ }</a></li>
       <li><a href="#projects" class="nav-link" data-label="Proyectos">[ ]</a></li>
+      <li><a href="#workflow" class="nav-link" data-label="Workflow">[~]</a></li>
       <li><a href="#contact" class="nav-link" data-label="Contacto">@</a></li>
     </ul>
     <div class="nav-indicator"></div>
@@ -307,6 +308,68 @@
         <div class="project-links">
           <a href="https://github.com/diegofer039-cloud/trello-clone" target="_blank" class="btn btn-small">Repo</a>
           <a href="https://diegofer039-cloud.github.io/trello-clone" target="_blank" class="btn btn-small">Demo</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== WORKFLOW ===== -->
+  <section id="workflow" data-giant="WORKFLOW">
+    <div class="section-header">
+      <span class="section-tag">// workflow.sh</span>
+      <h2 data-split>Git &rarr; GitHub &rarr; Render</h2>
+    </div>
+    <p class="workflow-intro">
+      Proyecto de tema libre: este portafolio se desarrolla aplicando el flujo
+      profesional de versionado, colaboración y despliegue continuo.
+    </p>
+    <div class="workflow-timeline">
+      <article class="workflow-step">
+        <span class="step-num">01</span>
+        <div class="step-body">
+          <h3>Uso de Git</h3>
+          <p>Control de versiones local del proyecto: historial, staging y commits atómicos.</p>
+          <code>$ git add . && git commit -m "feat: ..."</code>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="step-num">02</span>
+        <div class="step-body">
+          <h3>Uso de GitHub</h3>
+          <p>Repositorio remoto en github.com/diegofer039-cloud para respaldo y colaboración.</p>
+          <code>$ git push -u origin feature/opencode-render</code>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="step-num">03</span>
+        <div class="step-body">
+          <h3>Creación de una rama</h3>
+          <p>Desarrollo aislado de esta sección sin romper la versión estable de main.</p>
+          <code>$ git checkout -b feature/opencode-render</code>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="step-num">04</span>
+        <div class="step-body">
+          <h3>Unión contra main</h3>
+          <p>Pull Request revisado en GitHub y merge de la rama feature contra main.</p>
+          <code>$ gh pr create --base main && gh pr merge --merge</code>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="step-num">05</span>
+        <div class="step-body">
+          <h3>Primer agente en OpenCode</h3>
+          <p>Agente DevOps propio definido en .opencode/agent/portfolio-agent.md.</p>
+          <code>$ opencode &gt; Tab &gt; portfolio-agent</code>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="step-num">06</span>
+        <div class="step-body">
+          <h3>Publicación en Render</h3>
+          <p>Static Site desplegado con blueprint render.yaml; cada merge a main redespliega.</p>
+          <code>$ render blueprint launch &rarr; *.onrender.com</code>
         </div>
       </article>
     </div>
