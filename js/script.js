@@ -10,13 +10,7 @@
     infinite: false,
   })
 
-  function raf(time) {
-    lenis.raf(time)
-    requestAnimationFrame(raf)
-  }
-  requestAnimationFrame(raf)
-
-  // ===== GSAP + LENIS INTEGRATION =====
+  // ===== GSAP + LENIS INTEGRATION (único driver: gsap.ticker) =====
   lenis.on('scroll', ScrollTrigger.update)
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000)
@@ -32,41 +26,32 @@
   const loader = document.getElementById('loader')
   if (loader) {
     const lines = document.querySelectorAll('.loader-line')
-    let maxDelay = 0
 
     lines.forEach(line => {
       const delay = parseInt(line.dataset.delay) || 0
-      if (delay > maxDelay) maxDelay = delay
       setTimeout(() => line.classList.add('show'), delay)
     })
 
     const loaderCmd = document.getElementById('loader-cmd')
+    const enterLine = document.getElementById('loader-enter')
+    const typingStartDelay = enterLine ? parseInt(enterLine.dataset.delay) || 3200 : 3200
     const cmdText = './enter --portfolio'
     let cmdIdx = 0
 
-    const cmdInterval = setInterval(() => {
-      if (cmdIdx < cmdText.length) {
-        loaderCmd.textContent = cmdText.substring(0, cmdIdx + 1)
-        cmdIdx++
-      } else {
-        clearInterval(cmdInterval)
-        setTimeout(() => {
-          loader.classList.add('hidden')
-          openCurtain()
-        }, 600)
-      }
-    }, 80)
-
     setTimeout(() => {
-      if (cmdIdx < cmdText.length) {
-        loaderCmd.textContent = cmdText
-        clearInterval(cmdInterval)
-        setTimeout(() => {
-          loader.classList.add('hidden')
-          openCurtain()
-        }, 600)
-      }
-    }, maxDelay + 5000)
+      const cmdInterval = setInterval(() => {
+        if (cmdIdx < cmdText.length) {
+          loaderCmd.textContent = cmdText.substring(0, cmdIdx + 1)
+          cmdIdx++
+        } else {
+          clearInterval(cmdInterval)
+          setTimeout(() => {
+            loader.classList.add('hidden')
+            openCurtain()
+          }, 600)
+        }
+      }, 80)
+    }, typingStartDelay)
   }
 
   // ===== PAGE TRANSITION CURTAIN =====
@@ -151,7 +136,7 @@
         scrollTrigger: {
           trigger: heading,
           start: 'top 85%',
-          toggleActions: 'play none none reverse',
+          toggleActions: 'play none none none',
         }
       }
     )
@@ -168,7 +153,7 @@
         scrollTrigger: {
           trigger: section,
           start: 'top 85%',
-          toggleActions: 'play none none reverse',
+          toggleActions: 'play none none none',
         }
       })
     })
@@ -201,7 +186,7 @@
     })
 
     document.addEventListener('mouseenter', () => {
-      cursor.style.opacity = '0.6'
+      cursor.style.opacity = ''
     })
 
     document.querySelectorAll('a, button, .btn, .skill-card, .project-card, .stat-card').forEach(el => {
@@ -255,6 +240,18 @@
       rh = window.innerHeight
       rainCanvas.width = rw
       rainCanvas.height = rh
+
+      const newCount = Math.floor(rw / (fontSize * 1.5))
+      while (columns.length < newCount) {
+        columns.push({
+          y: Math.random() * -100,
+          speed: 0.4 + Math.random() * 0.3,
+          offset: 0,
+          targetOffset: 0,
+          snippet: codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
+        })
+      }
+      if (columns.length > newCount) columns.length = newCount
     }
 
     document.addEventListener('mousemove', (e) => {
@@ -346,25 +343,17 @@
     let wordIndex = 0
     let charIndex = 0
     let isDeleting = false
-    let isPaused = false
 
     function typeEffect() {
       if (!typingEl) return
       const currentWord = words[wordIndex]
 
-      if (isPaused) {
-        isPaused = false
-        isDeleting = true
-        setTimeout(typeEffect, 2000)
-        return
-      }
-
       if (!isDeleting) {
         typingEl.textContent = currentWord.substring(0, charIndex + 1)
         charIndex++
         if (charIndex === currentWord.length) {
-          isPaused = true
-          setTimeout(typeEffect, 2500)
+          isDeleting = true
+          setTimeout(typeEffect, 2000)
           return
         }
         setTimeout(typeEffect, 50 + Math.random() * 30)
@@ -417,8 +406,8 @@
   onScroll(updateNav)
   setTimeout(updateNav, 200)
 
-  // ===== NAV SMOOTH SCROLL =====
-  navLinks.forEach(link => {
+  // ===== SMOOTH SCROLL PARA ANCHORS =====
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault()
       const target = document.querySelector(link.getAttribute('href'))

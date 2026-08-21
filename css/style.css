@@ -37,7 +37,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.7;
-  overflow: hidden;
+  overflow-x: hidden;
   cursor: none;
 }
 
@@ -195,6 +195,7 @@ body {
 #about::before,
 #skills::before,
 #projects::before,
+#workflow::before,
 #contact::before {
   content: attr(data-giant);
   position: absolute;
@@ -445,7 +446,7 @@ body {
   position: absolute;
   right: 5%;
   bottom: 15%;
-  width: 340px;
+  width: 440px;
   background: #1e1e2e;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -485,6 +486,7 @@ body {
 .vscode-body {
   padding: 12px 8px;
   line-height: 1.8;
+  overflow: hidden;
 }
 
 .vscode-line {
