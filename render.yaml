@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: dev-portfolio
+    runtime: static
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true
